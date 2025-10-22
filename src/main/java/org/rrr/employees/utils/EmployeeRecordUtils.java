@@ -7,6 +7,9 @@ import java.time.LocalDate;
 public class EmployeeRecordUtils {
     private static final String csvSeparator = ",";
 
+    // if spring will be injected, not created on place and not static of course
+    private final static DateValidator dateValidator = new DateValidator();
+
     public static EmployeeRecordDto parseLine(String fileLine) {
         String[] values = fileLine.split(csvSeparator);
         EmployeeRecordDto employeeRecordDto = new EmployeeRecordDto();
@@ -16,7 +19,7 @@ public class EmployeeRecordUtils {
         if (values.length < 4 || values[3] == null || values[3].trim().isEmpty() || values[3].trim().equalsIgnoreCase("null")) {
             employeeRecordDto.setDateTo(LocalDate.now());
         } else {
-            employeeRecordDto.setDateTo(LocalDate.parse(values[3].trim()));
+            employeeRecordDto.setDateTo(dateValidator.pareseDate(values[3].trim()));
         }
         return employeeRecordDto;
     }
